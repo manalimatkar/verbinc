@@ -3,31 +3,32 @@ var mongoose = require("mongoose");
 // Create Schema class
 var Schema = mongoose.Schema;
 
-// Create article schema
+// Create user schema
 var UserSchema = new Schema({
-  // title is a required string
+  // firstname is a required string
   firstname: {
     type: String,
     required: true
   },
-  // link is a required string
+  // lastname is a required string
   lastname: {
     type: String,
     required: true
   },
-  // img is required string
+  // region is optional string
   region: {
       type: String,
       required: false
   },
+  // group is optional string
   group:{
     type:string,
     required: false
   }
 });
 
-// Create the Article model with the ArticleSchema
+// Create the User model with the UserSchema
 var User = mongoose.model("User", UserSchema);
 
-// Export the model
+// Export User the model
 module.exports = User;
