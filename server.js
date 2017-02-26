@@ -13,14 +13,13 @@ mongoose.Promise = Promise;
 // Initialize Express
 var app = express();
 
-
 // Use morgan and body parser with our app
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-// we set the port of the app
+// We set the port of the app
 app.set('port', process.env.PORT || 3000);
 
 // Make public a static dir
@@ -49,7 +48,7 @@ app.get("/", function(req, res) {
 });
 
 /* Route to populate database with dummy user data */
-app.get('/users', function(req, res){
+app.get('/loadusers', function(req, res){
 
      /*
        //To add data from a json file in the route folder
@@ -58,8 +57,8 @@ app.get('/users', function(req, res){
         console.log(user);
     */
    
-    request('https://randomuser.me/api/?results=10&nat=us&inc=name,nat', function(err , response){
-        var data = JSON.parse(response.body);
+        request('https://randomuser.me/api/?results=10&nat=us&inc=name,nat', function(err , response){
+             var data = JSON.parse(response.body);
             // console.log(data.results);
             data.results.forEach(function(data){
                 var newData = {
@@ -68,7 +67,7 @@ app.get('/users', function(req, res){
                     region: data.nat,
                     group: ''
                 }
-                 console.log(newData);
+                console.log(newData);
                 // Using our User model, create a newUser to insert in db
                 var newUser = new User(newData);
 
@@ -82,9 +81,79 @@ app.get('/users', function(req, res){
                     else {
                         console.log(doc);
                     }
-            });
-        });   
+                });
+            });   
+        });
+    // Tell the browser that we finished loading user data
+    res.send("User Data Upload Complete");
+});
+
+/* This will load the users we saved to the mongoDB */
+app.get("/users", function(req, res) {
+    // Grab every doc in the Articles array
+    User.find({}, function(error, doc) {
+        // Log any errors
+        if (error) {
+            console.log(error);
+        }
+        // Or send the doc to the browser as a json object
+        else {
+            res.json(doc);
+        }
     });
+});
+
+/* Search user by it's ObjectId */
+app.get("/users/:id", function(req, res) {
+    // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+    User.findOne({ "_id": req.params.id })
+        // now, execute our query
+        .exec(function(error, doc) {
+            // Log any errors
+            if (error) {
+                console.log(error);
+            }
+            // Otherwise, send the doc to the browser as a json object
+            else {
+                res.json(doc);
+            }
+        });
+});
+/*
+    Find User By Group
+ */
+app.get("/users/:groupName", function(req,res){
+
+    User.find({group: groupName}, function(err, doc){
+        
+            if (error) {
+                console.log(error);
+            }else{
+                console.log(doc);
+                 res.json(doc);
+            }
+
+    })
+
+});
+
+/* Update Group For User */
+app.post("/users/:id", function(req,res){
+
+    var groupName = req.body.group;
+
+    User.findOneAndUpdate({ "_id": req.params.id }, { $set: { 'group': groupName } }, { new: true })
+                // Execute the above query
+                .exec(function(err, doc) {
+                    // Log any errors
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        // Or send the document to the browser
+                        res.send(doc);
+                    }
+                });
+
 });
 
 //App Routes section ends
