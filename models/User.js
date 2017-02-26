@@ -22,7 +22,7 @@ var UserSchema = new Schema({
   },
   // group is optional string
   group:{
-    type:string,
+    type: String,
     required: false
   }
 });
