@@ -57,17 +57,32 @@ app.get('/users', function(req, res){
         var user = JSON.parse(fs.readFileSync('user.json', 'utf8'));
         console.log(user);
     */
-
-    request('https://randomuser.me/api/?results=1000&nat=us&inc=name,nat', function(err , response){
+   
+    request('https://randomuser.me/api/?results=10&nat=us&inc=name,nat', function(err , response){
         var data = JSON.parse(response.body);
             // console.log(data.results);
             data.results.forEach(function(data){
                 var newData = {
                     firstname: data.name.first,
                     lastname: data.name.last,
-                    region: data.nat
+                    region: data.nat,
+                    group: ''
                 }
-            console.log(newData);
+                 console.log(newData);
+                // Using our User model, create a newUser to insert in db
+                var newUser = new User(newData);
+
+                // Now, save that newUser to the db
+                newUser.save(function(err, doc) {
+                    // Log any errors
+                    if (err) {
+                        console.log(err);
+                    }
+                    // Or log the doc
+                    else {
+                        console.log(doc);
+                    }
+            });
         });   
     });
 });
