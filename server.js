@@ -91,46 +91,15 @@ app.get('/loadusers', function(req, res) {
     res.send("User Data Upload Complete");
 });
 
-app.get("/pageexample", function(req,res){
-    User.paginate({}, { page: 1, limit: 40 }, function(err, result) {
-        // result.docs 
-        // result.total 
-        // result.limit - 10 
-        // result.page - 3 
-        // result.pages 
-        if(err){
-            console.log(err);
-        }else{
-            console.log(result.docs);
-            res.json(result.docs);
-        }
-    });
-});
-
-/* This will load the users we saved to the mongoDB */
-app.get("/users", function(req, res) {
-    // Grab every doc in the Articles array
-    User.find({}, function(error, doc) {
-        // Log any errors
-        if (error) {
-            console.log(error);
-        }
-        // Or send the doc to the browser as a json object
-        else {
-            res.json(doc);
-        }
-    });
-});
-
 /* Search user by it's ObjectId */
 app.get("/users/:id", function(req, res) {
     // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
     User.findOne({ "_id": req.params.id })
         // now, execute our query
-        .exec(function(error, doc) {
+        .exec(function(err, doc) {
             // Log any errors
-            if (error) {
-                console.log(error);
+            if (err) {
+                console.log(err);
             }
             // Otherwise, send the doc to the browser as a json object
             else {
@@ -139,15 +108,15 @@ app.get("/users/:id", function(req, res) {
         });
 });
 /* Search user by it's firstname */
-app.get("/users/search/:firstname", function(req, res) {
+app.get("/users/search/name/:firstname", function(req, res) {
     // Using the firstname passed in the url parameter,
     //  prepare a query that finds all matching names in our db...
     User.find({ "firstname": req.params.firstname })
         // now, execute our query
-        .exec(function(error, doc) {
+        .exec(function(err, doc) {
             // Log any errors
-            if (error) {
-                console.log(error);
+            if (err) {
+                console.log(err);
             }
             // Otherwise, send the doc to the browser as a json object
             else {
@@ -158,17 +127,15 @@ app.get("/users/search/:firstname", function(req, res) {
 /*
     Find User By Group
  */
-app.get("/users/:groupName", function(req, res) {
+app.get("/users/search/group/:group", function(req, res) {
 
-    User.find({ group: groupName }, function(err, doc) {
-
-        if (error) {
-            console.log(error);
+    User.find({ group: req.params.group }, function(err, doc) {
+        if (err) {
+            console.log(err);
         } else {
             console.log(doc);
             res.json(doc);
         }
-
     });
 
 });
@@ -190,6 +157,40 @@ app.post("/users/:id", function(req, res) {
             }
         });
 
+});
+
+
+
+// trying pagination on server
+app.get("/pageexample", function(req,res){
+    User.paginate({}, { page: 1, limit: 40 }, function(err, result) {
+        // result.docs 
+        // result.total 
+        // result.limit - 10 
+        // result.page - 3 
+        // result.pages 
+        if(err){
+            console.log(err);
+        }else{
+            console.log(result.docs);
+            res.json(result.docs);
+        }
+    });
+});
+
+/* This will load all the users we saved to the mongoDB */
+app.get("/users", function(req, res) {
+    // Grab every doc in the Articles array
+    User.find({}, function(error, doc) {
+        // Log any errors
+        if (error) {
+            console.log(error);
+        }
+        // Or send the doc to the browser as a json object
+        else {
+            res.json(doc);
+        }
+    });
 });
 
 //App Routes section ends
