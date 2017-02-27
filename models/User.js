@@ -1,5 +1,6 @@
 // Require mongoose
 var mongoose = require("mongoose");
+var mongoosePaginate = require('mongoose-paginate');
 // Create Schema class
 var Schema = mongoose.Schema;
 
@@ -26,6 +27,8 @@ var UserSchema = new Schema({
     required: false
   }
 });
+
+UserSchema.plugin(mongoosePaginate);
 
 // Create the User model with the UserSchema
 var User = mongoose.model("User", UserSchema);

@@ -1,3 +1,5 @@
-.spaceWell{
-	margin: 2px;
+.wordWrap{
+	word-wrap: normal;
+	white-space:normal !important;
+    max-width: 100%;
 }

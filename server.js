@@ -4,11 +4,14 @@ var request = require("request");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var mongoosePaginate = require('mongoose-paginate');
+
 // Requiring our User model
 var User = require("./models/User.js");
 // Mongoose mpromise deprecated - use bluebird promises
 var Promise = require("bluebird");
 mongoose.Promise = Promise;
+
 
 // Initialize Express
 var app = express();
@@ -88,6 +91,22 @@ app.get('/loadusers', function(req, res) {
     res.send("User Data Upload Complete");
 });
 
+app.get("/pageexample", function(req,res){
+    User.paginate({}, { page: 1, limit: 40 }, function(err, result) {
+        // result.docs 
+        // result.total 
+        // result.limit - 10 
+        // result.page - 3 
+        // result.pages 
+        if(err){
+            console.log(err);
+        }else{
+            console.log(result.docs);
+            res.json(result.docs);
+        }
+    });
+});
+
 /* This will load the users we saved to the mongoDB */
 app.get("/users", function(req, res) {
     // Grab every doc in the Articles array
@@ -107,6 +126,23 @@ app.get("/users", function(req, res) {
 app.get("/users/:id", function(req, res) {
     // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
     User.findOne({ "_id": req.params.id })
+        // now, execute our query
+        .exec(function(error, doc) {
+            // Log any errors
+            if (error) {
+                console.log(error);
+            }
+            // Otherwise, send the doc to the browser as a json object
+            else {
+                res.json(doc);
+            }
+        });
+});
+/* Search user by it's firstname */
+app.get("/users/search/:firstname", function(req, res) {
+    // Using the firstname passed in the url parameter,
+    //  prepare a query that finds all matching names in our db...
+    User.find({ "firstname": req.params.firstname })
         // now, execute our query
         .exec(function(error, doc) {
             // Log any errors
