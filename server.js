@@ -48,42 +48,42 @@ app.get("/", function(req, res) {
 });
 
 /* Route to populate database with dummy user data */
-app.get('/loadusers', function(req, res){
+app.get('/loadusers', function(req, res) {
 
-     /*
+    /*
        //To add data from a json file in the route folder
         var fs = require('fs');
         var user = JSON.parse(fs.readFileSync('user.json', 'utf8'));
         console.log(user);
     */
-   
-        request('https://randomuser.me/api/?results=10&nat=us&inc=name,nat', function(err , response){
-             var data = JSON.parse(response.body);
-            // console.log(data.results);
-            data.results.forEach(function(data){
-                var newData = {
-                    firstname: data.name.first,
-                    lastname: data.name.last,
-                    region: data.nat,
-                    group: ''
-                }
-                console.log(newData);
-                // Using our User model, create a newUser to insert in db
-                var newUser = new User(newData);
 
-                // Now, save that newUser to the db
-                newUser.save(function(err, doc) {
-                    // Log any errors
-                    if (err) {
-                        console.log(err);
-                    }
-                    // Or log the doc
-                    else {
-                        console.log(doc);
-                    }
-                });
-            });   
+    request('https://randomuser.me/api/?results=5000&nat=us&inc=name,nat', function(err, response) {
+        var data = JSON.parse(response.body);
+        // console.log(data.results);
+        data.results.forEach(function(data) {
+            var newData = {
+                firstname: data.name.first,
+                lastname: data.name.last,
+                region: data.nat,
+                group: ''
+            }
+            console.log(newData);
+            // Using our User model, create a newUser to insert in db
+            var newUser = new User(newData);
+
+            // Now, save that newUser to the db
+            newUser.save(function(err, doc) {
+                // Log any errors
+                if (err) {
+                    console.log(err);
+                }
+                // Or log the doc
+                else {
+                    console.log(doc);
+                }
+            });
         });
+    });
     // Tell the browser that we finished loading user data
     res.send("User Data Upload Complete");
 });
@@ -122,37 +122,37 @@ app.get("/users/:id", function(req, res) {
 /*
     Find User By Group
  */
-app.get("/users/:groupName", function(req,res){
+app.get("/users/:groupName", function(req, res) {
 
-    User.find({group: groupName}, function(err, doc){
-        
-            if (error) {
-                console.log(error);
-            }else{
-                console.log(doc);
-                 res.json(doc);
-            }
+    User.find({ group: groupName }, function(err, doc) {
 
-    })
+        if (error) {
+            console.log(error);
+        } else {
+            console.log(doc);
+            res.json(doc);
+        }
+
+    });
 
 });
 
 /* Update Group For User */
-app.post("/users/:id", function(req,res){
+app.post("/users/:id", function(req, res) {
 
     var groupName = req.body.group;
 
     User.findOneAndUpdate({ "_id": req.params.id }, { $set: { 'group': groupName } }, { new: true })
-                // Execute the above query
-                .exec(function(err, doc) {
-                    // Log any errors
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        // Or send the document to the browser
-                        res.send(doc);
-                    }
-                });
+        // Execute the above query
+        .exec(function(err, doc) {
+            // Log any errors
+            if (err) {
+                console.log(err);
+            } else {
+                // Or send the document to the browser
+                res.send(doc);
+            }
+        });
 
 });
 
