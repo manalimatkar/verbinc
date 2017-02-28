@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-// We set the port of the app
+// We set the port of the pagepagepp
 app.set('port', process.env.PORT || 3000);
 
 // Make public a static dir
@@ -141,11 +141,12 @@ app.get("/users/search/group/:group", function(req, res) {
 });
 
 /* Update Group For User */
-app.post("/users/:id", function(req, res) {
+app.post("/updategroup", function(req, res) {
 
     var groupName = req.body.group;
+    var userid = req.body.id;
 
-    User.findOneAndUpdate({ "_id": req.params.id }, { $set: { 'group': groupName } }, { new: true })
+    User.findOneAndUpdate({ "_id": userid }, { $set: { 'group': groupName } }, { new: true })
         // Execute the above query
         .exec(function(err, doc) {
             // Log any errors

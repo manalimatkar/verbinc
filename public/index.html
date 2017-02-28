@@ -71,20 +71,17 @@
                     <div class="modal-body col-md-12">
                         <form>
                             <div class="form-group col-md-6">
-                                <label for="firstname">First Name: </label>
-                                <input type="text" class="form-control" id="firstname" readonly>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="lastname">Last Name: </label>
-                                <input type="text" class="form-control" id="lastname" readonly>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="region">Region: </label>
-                                <input type="text" class="form-control" id="region" readonly>
-                            </div>
-                            <div class="form-group col-md-6">
                                 <label for="group">Belongs to Group: </label>
-                                <input type="text" class="form-control" id="group">
+                                <input type="text" class="form-control" id="group" readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="groupselect">Assign to Group: </label>
+                                <select class="form-control" id="groupselect" onchange="updateUserGroup()">
+                                <option value="" disabled selected style="display:none;">Select Group</option>
+                                    <option value="sales">Sales</option>
+                                    <option value="it">IT</option>
+                                    <option value="support">Support</option>
+                                </select>
                             </div>
                             <div class="text-center">
                                 <button type="button" class="btn btn-default" id="updateUser">Update User</button>
