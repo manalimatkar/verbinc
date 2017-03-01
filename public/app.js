@@ -1,62 +1,77 @@
 // Search By Name Button Click
 $(document).on('click', "#searchByName", function() {
+    // Clear user grid
     $("#userList").html('');
+    // Set search type as username search
     $("#userList").attr("data-searchby", "username");
+    // Show searchName form
     $("#searchName").removeClass("hidden");
+    // Hide searchGroup form
     $("#searchGroup").addClass("hidden");
+    // Hide pagination buttons
     $("#pageButtons").addClass("hidden");
+    // Hide warningMessage
+    $("#warningMessage").addClass("hidden");
+    // Clear userName input fiels
+    $("#userName").val("");
 });
 
 // Search By Group Button Click
 $(document).on('click', "#searchByGroup", function() {
+    // Clear user grid
     $("#userList").html('');
+    // Set search type as groupname search
     $("#userList").attr("data-searchby", "groupname");
     $("#searchGroup").removeClass("hidden");
     $("#searchName").addClass("hidden");
     $("#pageButtons").addClass("hidden");
+    $("#warningMessage").addClass("hidden");
+    $("#groupName").val("");
 });
 
+// $(document).keypress(function(e) {
+//     var keyCode = e.which || e.keyCode;
+//     console.log("key pressed" + keyCode);
+//     if (keyCode == '13' && $("#userList").attr("data-searchby") == "username") {
+//         if ($("#userName").val().toLowerCase() !== "") {
+//             getUserByName();
+//         } else {
+//             alert("Please enter Name");
+//         }
+//     } else {
+//         if (keyCode == '13' && $("#userList").attr("data-searchby") == "groupname") {
+//             if ($("#groupName").val().toLowerCase() !== "") {
+//                 getUserByGroup();
+//             } else {
+//                 alert("Please enter Group");
+//             }
+//         }
+//     }
+// });
 
-
-//Handle search user by name for enterkey press
-document.onkeypress = function(e) {
-        console.log("inside enter press");
-        if (!e) e = window.event;
-        var keyCode = e.keyCode || e.which;
-        // Check if enter key is pressed and check value of userlist data-searchby 
-        if (keyCode == '13' && $("#userList").attr("data-searchby") == "username") {
-            if ($("#userName").val().toLowerCase() !== "") {
-                getUserByName();
-            } else {
-                alert("Please enter Name");
-            }
-        } else {
-            if (keyCode == '13' && $("#userList").attr("data-searchby") == "groupname") {
-
-                if ($("#groupName").val().toLowerCase() !== "") {
-                    getUserByGroup();
-                } else {
-                    alert("Please enter Group")
-                }
-            }
-        }
-    }
-    //Handle search user by name for button click
+//Handle search user by name for button click
 $(document).on("click", "#searchUser", function() {
-
     if ($("#userName").val().toLowerCase() !== "") {
+        $("#warningMessage").addClass("hidden");
         getUserByName();
     } else {
-        alert("Please enter Name");
+
+        $("#warningMessage").removeClass("hidden");
+        $("#warningMessage").html("<h3>Please enter Name</h3>");
+
     }
 });
 
 //Handle search user by group
 $(document).on("click", "#searchForGroup", function() {
-    if ($("#userName").val().toLowerCase() !== "") {
-    getUserByGroup();
+
+    if ($("#groupName").val().toLowerCase() !== "") {
+        $("#warningMessage").addClass("hidden");
+        getUserByGroup();
     } else {
-        alert("Please enter Group");
+        $("#warningMessage").removeClass("hidden");
+        $("#warningMessage").html("<h3>Please enter Group</h3>");
+
     }
 });
 
@@ -97,12 +112,11 @@ var getUserByGroup = function() {
             $("#pageButtons").removeClass("hidden");
             $("#next").attr("data-last", data.pages);
         }
-        //Populate userList with search results
-        displaySearchResults(data.docs);
+            displaySearchResults(data.docs);
     });
 
     //Clear value entered in the input 
-    $("#groupName").val("");
+    // $("#groupName").val("");
 }
 
 // Get Users By Name and Display in user grid
@@ -128,49 +142,59 @@ var getUserByName = function() {
             $("#pageButtons").removeClass("hidden");
             $("#next").attr("data-last", data.pages);
         }
-        //Populate userList with search results
-        displaySearchResults(data.docs);
+            displaySearchResults(data.docs);
     });
 
     //Clear value entered in the input 
-    $("#userName").val("");
+    // $("#userName").val("");
 }
 
 
 // Bind the data sent to tile grid
 
 var displaySearchResults = function(users) {
-    //For each user create a div and based on the group color code the cell
-    for (var i = 0; i < users.length; i++) {
-        //Create well                
-        var wellDiv = $("<div class='btn btn-default col-xs-6 col-sm-4 col-md-3 col-lg-2 userTile'>");
-        // Set data attribute on the well
-        wellDiv.attr('data-userid', users[i]._id);
-        wellDiv.attr('data-firstname', users[i].firstname);
-        wellDiv.attr('data-lastname', users[i].lastname);
-        wellDiv.attr('data-region', users[i].region);
-        wellDiv.attr('data-group', users[i].group);
-        switch (users[i].group) {
-            case "sales":
-                wellDiv.css('color', "orange");
-                break;
-            case "it":
-                wellDiv.css('color', "blue");
-                break;
-            case "support":
-                wellDiv.css('color', "yellow");
-                break;
-            default:
-                wellDiv.css('color', "grey");
+
+    if(users.length > 0){
+        //For each user create a div and based on the group color code the cell
+            for (var i = 0; i < users.length; i++) {
+            //Create well                
+            var wellDiv = $("<div class='btn btn-default col-xs-6 col-sm-4 col-md-3 col-lg-2 userTile'>");
+            // Set data attribute on the well
+            wellDiv.attr('data-userid', users[i]._id);
+            wellDiv.attr('data-firstname', users[i].firstname);
+            wellDiv.attr('data-lastname', users[i].lastname);
+            wellDiv.attr('data-region', users[i].region);
+            wellDiv.attr('data-group', users[i].group);
+            switch (users[i].group) {
+                case "sales":
+                    wellDiv.css('color', "orange");
+                    break;
+                case "it":
+                    wellDiv.css('color', "blue");
+                    break;
+                case "support":
+                    wellDiv.css('color', "yellow");
+                    break;
+                default:
+                    wellDiv.css('color', "grey");
+            }
+
+            // Create well
+            var wellBody = $("<p>").html("<h4>" + users[i].firstname + " " + users[i].lastname +
+                "</h4><span class='glyphicon glyphicon glyphicon-edit' data-toggle='modal' data-target='#updateForm'></span>");
+
+            wellDiv.append(wellBody);
+            $("#userList").append(wellDiv);
         }
 
-        // Create well
-        var wellBody = $("<p>").html("<h4>" + users[i].firstname + " " + users[i].lastname +
-            "</h4><span class='glyphicon glyphicon glyphicon-edit' data-toggle='modal' data-target='#updateForm'></span>");
+    } else{
 
-        wellDiv.append(wellBody);
-        $("#userList").append(wellDiv);
+         $("#warningMessage").removeClass("hidden");
+         $("#warningMessage").html("<h3>No Results Found</h3>");
+
     }
+    
+    
 }
 
 

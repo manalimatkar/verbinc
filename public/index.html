@@ -33,7 +33,7 @@
         <section>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-6 col-md-offset-3 text-center" style="padding-bottom: 30px;">
+                    <div class="col-md-8 col-md-offset-2 text-center">
                         <button id="searchByName" class="btn btn-default">Search By Name</button>
                         <button id="searchByGroup" class="btn btn-default">Search By Group</button>
                     </div>
@@ -42,13 +42,18 @@
         </section>
         <section>
             <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="warningMessage" class="text-center text-danger hidden"></div>
+                </div>
+            </div>
                 <div class="row">
                     <div class="col-sm-12 text-center hidden" id="searchName">
                         <div class="searchForm">
                         <form class="form-inline">
                             <div class="form-group">
-                                <label for="userName">Name: </label>
-                                <input type="text" id="userName" class="form-control" required>
+                                <!-- <label for="userName"><h4>Name: </h4></label> -->
+                                <input type="text" id="userName" class="form-control" placeholder="Enter Name">
                                 <button type="button" class="btn btn-primary" id="searchUser">Search</button>
                             </div>
                         </form>
@@ -58,8 +63,8 @@
                     <div class="searchForm">
                         <form class="form-inline">
                             <div class="form-group">
-                                <label for="groupName">Group: </label>
-                                <input type="text" id="groupName" class="form-control" required>
+                                <!-- <label for="groupName">Group: </label> -->
+                                <input type="text" id="groupName" class="form-control" placeholder="Enter Group">
                                 <button type="button" class="btn btn-primary" id="searchForGroup">Search</button>
                             </div>
                         </form>
