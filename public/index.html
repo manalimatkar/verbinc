@@ -22,11 +22,10 @@
                     <a class="navbar-brand" href="#">Verb Inc</a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="active">
-                        <a href="/loadusers"><span class="glyphicon glyphicon-download-alt"></span> Get Users</a>
-                    </li>
-                    <!-- <li><a href="#"><span class="glyphicon glyphicon-list"></span>  Articles List</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-edit"></span>  Notes</a></li> -->
+                    <li>
+                        <a href="#" id="searchByName"><span class="glyphicon glyphicon-user"></span> Search By Name</a>
+                    </li>                    
+                    <li><a href="#" id="searchByGroup"><span class="glyphicon glyphicon-asterisk"></span> Search By Group</a></li>
                 </ul>
             </div>
         </nav>
@@ -35,9 +34,27 @@
         <section>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-6 col-md-offset-3 text-center" style="padding-bottom: 30px;">
-                        <button id="searchByName" class="btn btn-danger">Search By Name</button>
-                        <button id="searchByGroup" class="btn btn-warning">Search By Group</button>
+                    <div class="col-sm-12 text-center hidden" id="searchName">
+                        <div class="searchForm">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label for="userName">Name: </label>
+                                <input type="text" id="userName" class="form-control" required="true" />
+                                <button type="button" class="btn btn-primary" id="searchUser">Search</button>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 text-center hidden" id="searchGroup">
+                    <div class="searchForm">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label for="groupName">Group: </label>
+                                <input type="text" id="groupName" class="form-control" required="true"/>
+                                <button type="button" class="btn btn-primary" id="searchForGroup">Search</button>
+                            </div>
+                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -45,31 +62,7 @@
         <section>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-6 col-md-offset-3 text-center hidden" id="searchName">
-                        <form>
-                            <div class="form-group form-inline">
-                                <!-- <label for="userName">Name: </label> -->
-                                <input type="text" id="userName" class="form-control" style="width: 40%" />
-                                <button type="button" class="btn btn-primary" id="searchUser">Search By Name</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-md-6 col-md-offset-3 text-center hidden" id="searchGroup">
-                        <form>
-                            <div class="form-group form-inline">
-                                <!-- <label for="groupName">Group: </label> -->
-                                <input type="text" id="groupName" class="form-control" style="width: 40%" />
-                                <button type="button" class="btn btn-primary" id="searchForGroup">Search By Group</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section>
-            <div class="container" style="padding-bottom: 30px;>
-                <div class="row">
-                    <div id="pageButtons" class="col-md-12 text-center hidden">
+                    <div id="pageButtons" class="col-md-12 text-center hidden" style="padding-bottom: 30px;">
                         <div class="col-md-4 col-md-offset-4">
                             <button id="previous" class="btn btn-primary" data-current="1" onclick="getPreviousPage()">prev</button>
                             <button id="next" class="btn btn-primary" data-current="1" data-last="" onclick="getNextPage()">next</button>
@@ -124,7 +117,7 @@
     <footer class="footer navbar-fixed-bottom">
         <div>
             <div class="row">
-                <div class="col-md-12 text-center"><h2>Manali Matkar</h2></div>
+                <div class="col-md-12 text-center"><h5>Manali Matkar</h5></div>
             </div>
         </div>
     </footer>

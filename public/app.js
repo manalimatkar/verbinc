@@ -17,41 +17,49 @@ $(document).on('click', "#searchByGroup", function() {
     $("#pageButtons").addClass("hidden");
 });
 
-//Handle search user by name
-$(document).on("click", "#searchUser", function() {
-
-    // empty div for search result
-    $("#userList").html('');
-    $("#userList").attr("data-searchby", "username");
-    // Grab the user name from  userName input
-    var userName = $("#userName").val().toLowerCase();
-    var pageNum = $("#previous").attr("data-current"); 
-
-    $("#userList").attr("data-searchvalue", userName);
-
-    // Run a GET request to search for users
-    $.ajax({
-        method: "GET",
-        url: "/users/search/name/" + userName + "/" + pageNum
-    }).done(function(data) {
-        console.log(data);       
-        if(data.pages > 1){
-             $("#pageButtons").removeClass("hidden");            
-             $("#next").attr("data-last", data.pages);            
-         }
-         //Populate userList with search results
-        displaySearchResults(data.docs);
-    });
-
-    //Clear value entered in the input 
-    $("#userName").val("");
-
+//Handle search user by name for button click
+$(document).on("click", "#searchUser", function() {    
+   getUsersByName(); 
 });
+
+//Handle search user by name for enterkey press
+document.onkeypress = function(e){
+    if (!e) e = window.event;
+    var keyCode = e.keyCode || e.which;
+    // Check if enter key is pressed and check value of userlist data-searchby 
+    if (keyCode == '13' && $("#userList").attr("data-searchby") == "username"){
+          getUsersByName();      
+        } else {
+            if (keyCode == '13' && $("#userList").attr("data-searchby") == "groupname"){
+            getUserByGroup();      
+        }
+    }
+  }
 
 //Handle search user by group
 $(document).on("click", "#searchForGroup", function() {
+    getUserByGroup();
+});
 
-    // empty div for search result
+// Handle click on the user tile get data by user id and bind it to modal
+$(document).on('click', '.userTile', function() {
+    var userid = $(this).data('userid');
+    // Get current user data and populate modal 
+    $.ajax({
+        method: "GET",
+        url: "/users/" + userid
+    }).done(function(data) {
+        // Send data to modal
+        populateModal(data);
+    });
+});
+
+/* Functions List */
+
+// Get Users By Group and Display in user grid
+
+var getUserByGroup = function(){
+      // empty div for search result
     $("#userList").html('');
     $("#userList").attr("data-searchby", "groupname");
     // Grab the user name from  userName input
@@ -76,25 +84,41 @@ $(document).on("click", "#searchForGroup", function() {
 
     //Clear value entered in the input 
     $("#groupName").val("");
+}
 
-});
+// Get Users By Name and Display in user grid
 
-// Handle click on the user tile get data by user id and bind it to modal
-$(document).on('click', '.userTile', function() {
+var getUsersByName = function(){
+        // empty div for search result
+    $("#userList").html('');
+    $("#userList").attr("data-searchby", "username");
+    // Grab the user name from  userName input
+    var userName = $("#userName").val().toLowerCase();
+    var pageNum = $("#previous").attr("data-current"); 
 
-    var userid = $(this).data('userid');
+    $("#userList").attr("data-searchvalue", userName);
 
+    // Run a GET request to search for users
     $.ajax({
         method: "GET",
-        url: "/users/" + userid
+        url: "/users/search/name/" + userName + "/" + pageNum
     }).done(function(data) {
-        // Send data to modal
-        populateModal(data);
+        console.log(data);       
+        if(data.pages > 1){
+             $("#pageButtons").removeClass("hidden");            
+             $("#next").attr("data-last", data.pages);            
+         }
+         //Populate userList with search results
+        displaySearchResults(data.docs);
     });
-});
+
+    //Clear value entered in the input 
+    $("#userName").val("");
+}
 
 
 // Bind the data sent to tile grid
+
 var displaySearchResults = function(users) {
     //For each user create a div and based on the group color code the cell
     for (var i = 0; i < users.length; i++) {
@@ -118,8 +142,7 @@ var displaySearchResults = function(users) {
                 break;
             default:
                 wellDiv.css('color', "grey");
-        }
-        
+        }     
 
         // Create well
         var wellBody = $("<p>").html("<h4>" + users[i].firstname + " " + users[i].lastname +
@@ -131,7 +154,8 @@ var displaySearchResults = function(users) {
 }
 
 
-// Populate user data in modal and handle user update
+// Bind clicked user data to modal
+
 var populateModal = function(user) {
 
     console.log("INSIDE POPULATE MODAL FUNCTION " + user._id);
@@ -142,24 +166,19 @@ var populateModal = function(user) {
         $("#group").val("No group assigned");
     } else {
         $("#group").val(user.group);
-    }
-   
+    }   
     $("#groupselect").attr("data-uid", user._id);
     $('#updateForm').modal('show');
 }
-
+// Function to handle onchange event on select
 var updateUserGroup = function() {
-    var oldgroup = $("#group").val();
-    console.log(oldgroup);
+
+    var oldgroup = $("#group").val();   
     var newgroup = $("#groupselect").val();
     var uid =  $("#groupselect").attr("data-uid");
-    console.log(newgroup);
     var searchby = $("#userList").attr("data-searchby");
-    console.log(searchby);
-
 
     console.log("INSIDE SELECT HANDLER UPDATE USER GROUP FUNCTION" + uid)
-
     $.ajax({
         method: "POST",
         url: "/updategroup",
