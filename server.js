@@ -107,7 +107,7 @@ app.get("/users/:id", function(req, res) {
             }
         });
 });
-/* Search user by it's firstname */
+/* Search user by firstname */
 app.get("/users/search/name/:firstname/:pageNum", function(req, res) {
     // Using the firstname passed in the url parameter,
     //  prepare a query that finds all matching names in our db...
@@ -136,6 +136,22 @@ app.get("/users/search/group/:group/:pageNum", function(req, res) {
         }
     });
 
+});
+
+app.get("/users/getall/:pageNum", function(req,res){
+    User.paginate({}, { page: req.params.pageNum, limit: 40 }, function(err, result) {
+        // result.docs 
+        // result.total 
+        // result.limit - 10 
+        // result.page - 3 
+        // result.pages 
+        if(err){
+            console.log(err);
+        }else{
+            console.log(result);
+            res.json(result);
+        }
+    });
 });
 
 /* Update Group For User */

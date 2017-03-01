@@ -29,25 +29,30 @@ $(document).on('click', "#searchByGroup", function() {
     $("#groupName").val("");
 });
 
-// $(document).keypress(function(e) {
-//     var keyCode = e.which || e.keyCode;
-//     console.log("key pressed" + keyCode);
-//     if (keyCode == '13' && $("#userList").attr("data-searchby") == "username") {
-//         if ($("#userName").val().toLowerCase() !== "") {
-//             getUserByName();
-//         } else {
-//             alert("Please enter Name");
-//         }
-//     } else {
-//         if (keyCode == '13' && $("#userList").attr("data-searchby") == "groupname") {
-//             if ($("#groupName").val().toLowerCase() !== "") {
-//                 getUserByGroup();
-//             } else {
-//                 alert("Please enter Group");
-//             }
-//         }
-//     }
-// });
+$(document).on("click", "#getAllUsers", function(){
+
+     // Clear user grid
+    $("#userList").html('');
+    // Hide search forms
+    $("#searchGroup").removeClass("hidden");
+    $("#searchName").addClass("hidden");
+    // Hide warning message
+    $("#warningMessage").addClass("hidden");
+
+    var pageNum = $("#previous").attr("data-current");
+    $.ajax({
+        method: "GET",
+        url: "/users/getall/" + pageNum
+    }).done(function(data) {
+        if (parseInt(data.pages) > 1) {
+            console.log("Number of total pages" + data.pages);
+            $("#pageButtons").removeClass("hidden");
+            $("#next").attr("data-last", data.pages);
+        }
+            displaySearchResults(data.docs);
+    });
+});
+
 
 //Handle search user by name for button click
 $(document).on("click", "#searchUser", function() {
@@ -242,7 +247,7 @@ var updateUserGroup = function() {
 
     });
 
-    if (searchby == "username") {
+    if (searchby == "username" || searchby == "") {
         switch (newgroup) {
             case "sales":
                 $('.userTile').filter('[data-userid = ' + uid + ']').css('color', "orange");
@@ -269,10 +274,11 @@ var getPreviousPage = function() {
 
     if ($("#userList").attr("data-searchby") == "groupname") {
         subUrl = "/users/search/group/" + $("#userList").attr("data-searchvalue");
-    } else {
-        if ($("#userList").attr("data-searchby") == "username") {
+    } else if ($("#userList").attr("data-searchby") == "username") {
             subUrl = "/users/search/name/" + $("#userList").attr("data-searchvalue");
-        }
+    }
+    else if($("#userList").attr("data-searchby") == ""){
+            subUrl = "/users/getall";
     }
 
     var currentPage = $("#previous").attr("data-current");
@@ -301,10 +307,10 @@ var getNextPage = function() {
 
     if ($("#userList").attr("data-searchby") == "groupname") {
         subUrl = "/users/search/group/" + $("#userList").attr("data-searchvalue");
-    } else {
-        if ($("#userList").attr("data-searchby") == "username") {
+    } else if ($("#userList").attr("data-searchby") == "username") {
             subUrl = "/users/search/name/" + $("#userList").attr("data-searchvalue");
-        }
+    } else if($("#userList").attr("data-searchby") == ""){
+            subUrl = "/users/getall";
     }
 
     var currentPage = $("#next").attr("data-current");
@@ -329,3 +335,24 @@ var getNextPage = function() {
         }
     }
 }
+
+// $(document).keypress(function(e) {
+//     var keyCode = e.which || e.keyCode;
+//     console.log("key pressed" + keyCode);
+//     if (keyCode == '13' && $("#userList").attr("data-searchby") == "username") {
+//         if ($("#userName").val().toLowerCase() !== "") {
+//             getUserByName();
+//         } else {
+//             alert("Please enter Name");
+//         }
+//     } else {
+//         if (keyCode == '13' && $("#userList").attr("data-searchby") == "groupname") {
+//             if ($("#groupName").val().toLowerCase() !== "") {
+//                 getUserByGroup();
+//             } else {
+//                 alert("Please enter Group");
+//             }
+//         }
+//     }
+// });
+
