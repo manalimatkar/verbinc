@@ -75,7 +75,7 @@ $(document).on("click", "#searchForGroup", function() {
     });
 
     //Clear value entered in the input 
-    $("#userName").val("");
+    $("#groupName").val("");
 
 });
 
