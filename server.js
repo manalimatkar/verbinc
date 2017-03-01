@@ -108,33 +108,31 @@ app.get("/users/:id", function(req, res) {
         });
 });
 /* Search user by it's firstname */
-app.get("/users/search/name/:firstname", function(req, res) {
+app.get("/users/search/name/:firstname/:pageNum", function(req, res) {
     // Using the firstname passed in the url parameter,
     //  prepare a query that finds all matching names in our db...
-    User.find({ "firstname": req.params.firstname })
-        // now, execute our query
-        .exec(function(err, doc) {
+    User.paginate({ firstname: req.params.firstname }, { page: req.params.pageNum, limit: 40 }, function(err, result) {
             // Log any errors
             if (err) {
                 console.log(err);
             }
             // Otherwise, send the doc to the browser as a json object
             else {
-                res.json(doc);
+                res.json(result);
             }
         });
 });
 /*
     Find User By Group
  */
-app.get("/users/search/group/:group", function(req, res) {
+app.get("/users/search/group/:group/:pageNum", function(req, res) {
 
-    User.find({ group: req.params.group }, function(err, doc) {
+    User.paginate({ group: req.params.group }, { page: req.params.pageNum, limit: 40 }, function(err, result) {
         if (err) {
             console.log(err);
         } else {
-            console.log(doc);
-            res.json(doc);
+            console.log(result);
+            res.json(result);
         }
     });
 

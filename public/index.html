@@ -31,29 +31,35 @@
             </div>
         </nav>
     </header>
+    <main>
     <section>
-        <div class="container">
-        <div class="row">
-            <div class="well col-md-6 col-md-offset-3 text-center">
-                <button id="searchByName" class="btn btn-danger">Search By Name</button>   <button id="searchByGroup" class="btn btn-warning">Search By Group</button>
+    <div class="container">
+          <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center" style="padding-bottom: 30px;">
+                    <button id="searchByName" class="btn btn-danger">Search By Name</button>
+                    <button id="searchByGroup" class="btn btn-warning">Search By Group</button>
+                </div>
             </div>
         </div>
+    </section>
+    <section>
+        <div class="container">          
             <div class="row">
-                <div class="well col-md-6 col-md-offset-3 text-center hidden" id="searchName">
+                <div class="col-md-6 col-md-offset-3 text-center hidden" id="searchName">
                     <form>
                         <div class="form-group form-inline">
-                            <label for="userName">Name: </label>
+                            <!-- <label for="userName">Name: </label> -->
                             <input type="text" id="userName" class="form-control" style="width: 40%" />
-                            <button type="button" class="btn btn-primary" id="searchUser">Search</button>
+                            <button type="button" class="btn btn-primary" id="searchUser">Search By Name</button>
                         </div>
                     </form>
                 </div>
-                <div class="well col-md-6 col-md-offset-3 text-center hidden" id="searchGroup">
+                <div class="col-md-6 col-md-offset-3 text-center hidden" id="searchGroup">
                     <form>
                         <div class="form-group form-inline">
-                            <label for="groupName">Group: </label>
+                            <!-- <label for="groupName">Group: </label> -->
                             <input type="text" id="groupName" class="form-control" style="width: 40%" />
-                            <button type="button" class="btn btn-primary" id="searchForGroup">Search</button>
+                            <button type="button" class="btn btn-primary" id="searchForGroup">Search By Group</button>
                         </div>
                     </form>
                 </div>
@@ -61,6 +67,19 @@
         </div>
     </section>
     <section>
+        <div class="container">
+         <div class="row">
+                <div id="pageButtons" class="col-md-12 text-center hidden" style="padding-bottom: 30px;>
+                    <div class="col-md-4 col-md-offset-4">
+                        <button id="previous" class="btn btn-primary" data-current="1" onclick="getPreviousPage()">prev</button>
+                        <button id="next" class="btn btn-primary" data-current="1" data-last="" onclick="getNextPage()">next</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </section>
+    <section>
+        <div class="container">
         <div id="updateForm" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -77,16 +96,12 @@
                             <div class="form-group col-md-6">
                                 <label for="groupselect">Assign to Group: </label>
                                 <select class="form-control" id="groupselect" onchange="updateUserGroup()">
-                                <option value="" disabled selected style="display:none;">Select Group</option>
+                                    <option value="" disabled selected style="display:none;">Select Group</option>
                                     <option value="sales">Sales</option>
                                     <option value="it">IT</option>
                                     <option value="support">Support</option>
                                 </select>
                             </div>
-                            <div class="text-center">
-                                <button type="button" class="btn btn-default" id="updateUser">Update User</button>
-                            </div>
-                            <!-- <button type="button" class="btn btn-danger" id="deleteNote">Delete Note</button> -->
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -95,6 +110,7 @@
                 </div>
             </div>
             <div>
+            </div>
     </section>
     <section>
         <div class="container text-center">
@@ -104,6 +120,14 @@
             </div>
         </div>
     </section>
+    </main>
+    <footer>
+        <div class="footer navbar-fixed-bottom">
+            <div class="row">
+                <div class="col-md-12 text-center"><h3>Manali Matkar</h3></div>
+            </div>
+        </div>
+    </footer>
     <script src="app.js"></script>
 </body>
 
