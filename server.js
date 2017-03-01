@@ -29,7 +29,7 @@ app.set('port', process.env.PORT || 3000);
 app.use(express.static("public"));
 
 // Database configuration with mongoose
-mongoose.connect("mongodb://localhost/userinfo");
+mongoose.connect("mongodb://heroku_g0w1rj29:o6h4ve5g3gruecga1ujrqpa702@ds111940.mlab.com:11940/heroku_g0w1rj29");
 var db = mongoose.connection;
 
 // Show any mongoose errors
