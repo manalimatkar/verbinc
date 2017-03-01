@@ -22,10 +22,9 @@
                     <a class="navbar-brand" href="#">Verb Inc</a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#" id="searchByName"><span class="glyphicon glyphicon-user"></span> Search By Name</a>
-                    </li>                    
-                    <li><a href="#" id="searchByGroup"><span class="glyphicon glyphicon-asterisk"></span> Search By Group</a></li>
+                    <li class="active">
+                        <a href="/loadusers"><span class="glyphicon glyphicon-download-alt"></span> Get Users</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -34,12 +33,22 @@
         <section>
             <div class="container">
                 <div class="row">
+                    <div class="col-md-6 col-md-offset-3 text-center" style="padding-bottom: 30px;">
+                        <button id="searchByName" class="btn btn-default">Search By Name</button>
+                        <button id="searchByGroup" class="btn btn-default">Search By Group</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="container">
+                <div class="row">
                     <div class="col-sm-12 text-center hidden" id="searchName">
                         <div class="searchForm">
                         <form class="form-inline">
                             <div class="form-group">
                                 <label for="userName">Name: </label>
-                                <input type="text" id="userName" class="form-control" required="true" />
+                                <input type="text" id="userName" class="form-control" required>
                                 <button type="button" class="btn btn-primary" id="searchUser">Search</button>
                             </div>
                         </form>
@@ -50,7 +59,7 @@
                         <form class="form-inline">
                             <div class="form-group">
                                 <label for="groupName">Group: </label>
-                                <input type="text" id="groupName" class="form-control" required="true"/>
+                                <input type="text" id="groupName" class="form-control" required>
                                 <button type="button" class="btn btn-primary" id="searchForGroup">Search</button>
                             </div>
                         </form>

@@ -1,4 +1,3 @@
-
 // Search By Name Button Click
 $(document).on('click', "#searchByName", function() {
     $("#userList").html('');
@@ -17,28 +16,48 @@ $(document).on('click', "#searchByGroup", function() {
     $("#pageButtons").addClass("hidden");
 });
 
-//Handle search user by name for button click
-$(document).on("click", "#searchUser", function() {    
-   getUsersByName(); 
-});
+
 
 //Handle search user by name for enterkey press
-document.onkeypress = function(e){
-    if (!e) e = window.event;
-    var keyCode = e.keyCode || e.which;
-    // Check if enter key is pressed and check value of userlist data-searchby 
-    if (keyCode == '13' && $("#userList").attr("data-searchby") == "username"){
-          getUsersByName();      
+document.onkeypress = function(e) {
+        console.log("inside enter press");
+        if (!e) e = window.event;
+        var keyCode = e.keyCode || e.which;
+        // Check if enter key is pressed and check value of userlist data-searchby 
+        if (keyCode == '13' && $("#userList").attr("data-searchby") == "username") {
+            if ($("#userName").val().toLowerCase() !== "") {
+                getUserByName();
+            } else {
+                alert("Please enter Name");
+            }
         } else {
-            if (keyCode == '13' && $("#userList").attr("data-searchby") == "groupname"){
-            getUserByGroup();      
+            if (keyCode == '13' && $("#userList").attr("data-searchby") == "groupname") {
+
+                if ($("#groupName").val().toLowerCase() !== "") {
+                    getUserByGroup();
+                } else {
+                    alert("Please enter Group")
+                }
+            }
         }
     }
-  }
+    //Handle search user by name for button click
+$(document).on("click", "#searchUser", function() {
+
+    if ($("#userName").val().toLowerCase() !== "") {
+        getUserByName();
+    } else {
+        alert("Please enter Name");
+    }
+});
 
 //Handle search user by group
 $(document).on("click", "#searchForGroup", function() {
+    if ($("#userName").val().toLowerCase() !== "") {
     getUserByGroup();
+    } else {
+        alert("Please enter Group");
+    }
 });
 
 // Handle click on the user tile get data by user id and bind it to modal
@@ -58,26 +77,26 @@ $(document).on('click', '.userTile', function() {
 
 // Get Users By Group and Display in user grid
 
-var getUserByGroup = function(){
-      // empty div for search result
+var getUserByGroup = function() {
+    // empty div for search result
     $("#userList").html('');
     $("#userList").attr("data-searchby", "groupname");
     // Grab the user name from  userName input
     var groupName = $("#groupName").val().toLowerCase();
-    var pageNum = $("#previous").attr("data-current"); 
+    var pageNum = $("#previous").attr("data-current");
 
     $("#userList").attr("data-searchvalue", groupName);
 
     // Run a GET request to search for users
     $.ajax({
         method: "GET",
-        url: "/users/search/group/" + groupName  + "/" + pageNum
+        url: "/users/search/group/" + groupName + "/" + pageNum
     }).done(function(data) {
-         if(parseInt(data.pages) > 1){
+        if (parseInt(data.pages) > 1) {
             console.log("Number of total pages" + data.pages);
-             $("#pageButtons").removeClass("hidden");
-             $("#next").attr("data-last", data.pages);  
-         }
+            $("#pageButtons").removeClass("hidden");
+            $("#next").attr("data-last", data.pages);
+        }
         //Populate userList with search results
         displaySearchResults(data.docs);
     });
@@ -88,13 +107,14 @@ var getUserByGroup = function(){
 
 // Get Users By Name and Display in user grid
 
-var getUsersByName = function(){
-        // empty div for search result
+var getUserByName = function() {
+
+    // empty div for search result
     $("#userList").html('');
     $("#userList").attr("data-searchby", "username");
     // Grab the user name from  userName input
     var userName = $("#userName").val().toLowerCase();
-    var pageNum = $("#previous").attr("data-current"); 
+    var pageNum = $("#previous").attr("data-current");
 
     $("#userList").attr("data-searchvalue", userName);
 
@@ -103,12 +123,12 @@ var getUsersByName = function(){
         method: "GET",
         url: "/users/search/name/" + userName + "/" + pageNum
     }).done(function(data) {
-        console.log(data);       
-        if(data.pages > 1){
-             $("#pageButtons").removeClass("hidden");            
-             $("#next").attr("data-last", data.pages);            
-         }
-         //Populate userList with search results
+        console.log(data);
+        if (data.pages > 1) {
+            $("#pageButtons").removeClass("hidden");
+            $("#next").attr("data-last", data.pages);
+        }
+        //Populate userList with search results
         displaySearchResults(data.docs);
     });
 
@@ -142,7 +162,7 @@ var displaySearchResults = function(users) {
                 break;
             default:
                 wellDiv.css('color', "grey");
-        }     
+        }
 
         // Create well
         var wellBody = $("<p>").html("<h4>" + users[i].firstname + " " + users[i].lastname +
@@ -158,24 +178,24 @@ var displaySearchResults = function(users) {
 
 var populateModal = function(user) {
 
-    console.log("INSIDE POPULATE MODAL FUNCTION " + user._id);
-    var fullName = user.firstname + " " + user.lastname;
+        console.log("INSIDE POPULATE MODAL FUNCTION " + user._id);
+        var fullName = user.firstname + " " + user.lastname;
 
-    $("#modalTitle").text(fullName.toUpperCase());
-    if (user.group === "") {
-        $("#group").val("No group assigned");
-    } else {
-        $("#group").val(user.group);
-    }   
-    $("#groupselect").attr("data-uid", user._id);
-    $('#updateForm').modal('show');
-}
-// Function to handle onchange event on select
+        $("#modalTitle").text(fullName.toUpperCase());
+        if (user.group === "") {
+            $("#group").val("No group assigned");
+        } else {
+            $("#group").val(user.group);
+        }
+        $("#groupselect").attr("data-uid", user._id);
+        $('#updateForm').modal('show');
+    }
+    // Function to handle onchange event on select
 var updateUserGroup = function() {
 
-    var oldgroup = $("#group").val();   
+    var oldgroup = $("#group").val();
     var newgroup = $("#groupselect").val();
-    var uid =  $("#groupselect").attr("data-uid");
+    var uid = $("#groupselect").attr("data-uid");
     var searchby = $("#userList").attr("data-searchby");
 
     console.log("INSIDE SELECT HANDLER UPDATE USER GROUP FUNCTION" + uid)
@@ -196,7 +216,7 @@ var updateUserGroup = function() {
         $("#updateUser").attr("data-updateid", "");
         $('#updateForm').modal('hide');
 
-    });  
+    });
 
     if (searchby == "username") {
         switch (newgroup) {
@@ -223,10 +243,10 @@ var getPreviousPage = function() {
 
     var subUrl = "";
 
-    if($("#userList").attr("data-searchby") == "groupname"){
-        subUrl = "/users/search/group/" + $("#userList").attr("data-searchvalue") ;
+    if ($("#userList").attr("data-searchby") == "groupname") {
+        subUrl = "/users/search/group/" + $("#userList").attr("data-searchvalue");
     } else {
-        if($("#userList").attr("data-searchby") == "username"){
+        if ($("#userList").attr("data-searchby") == "username") {
             subUrl = "/users/search/name/" + $("#userList").attr("data-searchvalue");
         }
     }
@@ -243,10 +263,10 @@ var getPreviousPage = function() {
                 url: subUrl + "/" + prevPage
             }).done(function(data) {
                 console.log(data);
-                 $("#previous").attr("data-current", data.page);
-                 $("#next").attr("data-current", data.page);
-                 $("#userList").html("");
-                 displaySearchResults(data.docs);
+                $("#previous").attr("data-current", data.page);
+                $("#next").attr("data-current", data.page);
+                $("#userList").html("");
+                displaySearchResults(data.docs);
             });
         }
     }
@@ -255,10 +275,10 @@ var getNextPage = function() {
 
     var subUrl = "";
 
-    if($("#userList").attr("data-searchby") == "groupname"){
-        subUrl = "/users/search/group/" + $("#userList").attr("data-searchvalue") ;
+    if ($("#userList").attr("data-searchby") == "groupname") {
+        subUrl = "/users/search/group/" + $("#userList").attr("data-searchvalue");
     } else {
-        if($("#userList").attr("data-searchby") == "username"){
+        if ($("#userList").attr("data-searchby") == "username") {
             subUrl = "/users/search/name/" + $("#userList").attr("data-searchvalue");
         }
     }
@@ -276,7 +296,7 @@ var getNextPage = function() {
                 method: "GET",
                 url: subUrl + "/" + nextPage
             }).done(function(data) {
-                console.log(data);               
+                console.log(data);
                 $("#next").attr("data-current", data.page);
                 $("#previous").attr("data-current", data.page);
                 $("#userList").html("");
@@ -285,4 +305,3 @@ var getNextPage = function() {
         }
     }
 }
-
