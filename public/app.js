@@ -32,9 +32,10 @@ $(document).on('click', "#searchByGroup", function() {
 $(document).on("click", "#getAllUsers", function(){
 
      // Clear user grid
+    $("#userList").attr("data-searchby", "")
     $("#userList").html('');
     // Hide search forms
-    $("#searchGroup").removeClass("hidden");
+    $("#searchGroup").addClass("hidden");
     $("#searchName").addClass("hidden");
     // Hide warning message
     $("#warningMessage").addClass("hidden");
@@ -56,6 +57,7 @@ $(document).on("click", "#getAllUsers", function(){
 
 //Handle search user by name for button click
 $(document).on("click", "#searchUser", function() {
+      $("#userList").attr("data-searchby", "username")
     if ($("#userName").val().toLowerCase() !== "") {
         $("#warningMessage").addClass("hidden");
         getUserByName();
@@ -69,7 +71,7 @@ $(document).on("click", "#searchUser", function() {
 
 //Handle search user by group
 $(document).on("click", "#searchForGroup", function() {
-
+  $("#userList").attr("data-searchby", "groupname")
     if ($("#groupName").val().toLowerCase() !== "") {
         $("#warningMessage").addClass("hidden");
         getUserByGroup();
