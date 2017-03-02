@@ -49,7 +49,7 @@ $(document).on("click", "#getAllUsers", function(){
     }).done(function(data) {
         // If number of pages returned are more than 1
         if (parseInt(data.pages) > 1) {
-            // console.log("Number of total pages" + data.pages);
+            
             //Show page navigation buttons
             $("#pageButtons").removeClass("hidden");
             // set last page attr to number of pages
@@ -138,7 +138,7 @@ var getUserByGroup = function() {
     }).done(function(data) {
         // If number of pages returned are more than 1
         if (parseInt(data.pages) > 1) {
-            // console.log("Number of total pages" + data.pages);
+           
             // Show page navigation buttons
             $("#pageButtons").removeClass("hidden");
             // set last page attr to number of pages
@@ -148,8 +148,6 @@ var getUserByGroup = function() {
             displaySearchResults(data.docs);
     });
 
-    //Clear value entered in the input 
-    // $("#groupName").val("");
 }
 
 // Get Users By Name and Display in user grid
@@ -172,7 +170,7 @@ var getUserByName = function() {
         method: "GET",
         url: "/users/search/name/" + userName + "/" + pageNum
     }).done(function(data) {
-        // console.log(data);
+        
         //If number of pages returned are more than 1
         if (data.pages > 1) {
              // Show page navigation buttons
@@ -184,13 +182,10 @@ var getUserByName = function() {
             displaySearchResults(data.docs);
     });
 
-    //Clear value entered in the input 
-    // $("#userName").val("");
 }
 
 
 // Bind the data sent to tile grid
-
 var displaySearchResults = function(users) {
     //If results length is > 0 populate results grid
     if(users.length > 0){
@@ -242,7 +237,6 @@ var displaySearchResults = function(users) {
 // Bind clicked user data to modal
 var populateModal = function(user) {
 
-        // console.log("INSIDE POPULATE MODAL FUNCTION " + user._id);
         // Create full name
         var fullName = user.firstname + " " + user.lastname;
         // Set Modal Title to uppercase full name
