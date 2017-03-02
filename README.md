@@ -12,7 +12,7 @@ There are currently 3 flows available:
 3. View all users
 
 You can assign or update the group user belongs to from any of these flows.
-When adding users to display they are color coded based on the group the user belongs to. I am working on adding legend to show the color codes.
+When adding users to display, they are color coded based on group user belongs to.
 
 ## Technologies Used 
 
@@ -30,6 +30,7 @@ When adding users to display they are color coded based on the group the user be
 5. Uncomment Grab Data link from the navigation in index.html
 6. Run "node server" to start server
 7. Open browser and load http://localhost:3000 to load the application.
+8. Click on Get Users Link to get first set of 5000 users insert to your local database.
 
 ## Authors
 
