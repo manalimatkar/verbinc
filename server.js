@@ -6,23 +6,22 @@ var logger = require("morgan");
 var mongoose = require("mongoose");
 var mongoosePaginate = require('mongoose-paginate');
 
-// Requiring our User model
+//Import User model
 var User = require("./models/User.js");
 // Mongoose mpromise deprecated - use bluebird promises
 var Promise = require("bluebird");
 mongoose.Promise = Promise;
 
-
 // Initialize Express
 var app = express();
 
-// Use morgan and body parser with our app
+// Use morgan and body parser
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-// We set the port of the pagepagepp
+//Set the port
 app.set('port', process.env.PORT || 3000);
 
 // Make public a static dir
@@ -91,7 +90,7 @@ app.get('/loadusers', function(req, res) {
     res.send("User Data Upload Complete");
 });
 
-/* Search user by it's ObjectId */
+/* Search user by ObjectId */
 app.get("/users/:id", function(req, res) {
     // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
     User.findOne({ "_id": req.params.id })
@@ -110,7 +109,7 @@ app.get("/users/:id", function(req, res) {
 /* Search user by firstname */
 app.get("/users/search/name/:firstname/:pageNum", function(req, res) {
     // Using the firstname passed in the url parameter,
-    //  prepare a query that finds all matching names in our db...
+    // Use pagination instead of find()
     User.paginate({ firstname: req.params.firstname }, { page: req.params.pageNum, limit: 40 }, function(err, result) {
             // Log any errors
             if (err) {
@@ -126,7 +125,8 @@ app.get("/users/search/name/:firstname/:pageNum", function(req, res) {
     Find User By Group
  */
 app.get("/users/search/group/:group/:pageNum", function(req, res) {
-
+    // Using the group passed in the url parameter,
+    // Use pagination instead of find()
     User.paginate({ group: req.params.group }, { page: req.params.pageNum, limit: 40 }, function(err, result) {
         if (err) {
             console.log(err);
@@ -142,8 +142,8 @@ app.get("/users/getall/:pageNum", function(req,res){
     User.paginate({}, { page: req.params.pageNum, limit: 40 }, function(err, result) {
         // result.docs 
         // result.total 
-        // result.limit - 10 
-        // result.page - 3 
+        // result.limit - 40
+        // result.page - req.params.pageNum
         // result.pages 
         if(err){
             console.log(err);
@@ -156,7 +156,7 @@ app.get("/users/getall/:pageNum", function(req,res){
 
 /* Update Group For User */
 app.post("/updategroup", function(req, res) {
-
+    
     var groupName = req.body.group;
     var userid = req.body.id;
 
