@@ -1,4 +1,4 @@
-# User Search and Updated Prototype App
+# User Search Prototype App
 
 You can search user by name or the group user belongs to. There is option to view all user.
 App is currently deployed and live at Heroku @ [Users App](https://stormy-beyond-25687.herokuapp.com)
